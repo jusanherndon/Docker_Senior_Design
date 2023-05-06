@@ -42,7 +42,7 @@ ENV LANG=en_US.UTF-8
 
 RUN git clone https://github.com/jmogainz/base_station_receiver.git src/base_station_receiver
 RUN git clone https://github.com/jmogainz/transport_drivers.git src/transport_drivers
-RUN git clone https://github.com/jmogainz/two_wheeled_robot.git src/two_wheeled_robot
+RUN git clone https://github.com/jmogainz/lotus_nav.git src/lotus_nav
 RUN git clone -b ros2 https://github.com/jmogainz/ublox.git src/ublox
 RUN git clone -b ros2 https://github.com/jmogainz/vesc.git src/vesc
 RUN git clone --recurse-submodules https://github.com/jmogainz/ros2_bno055_sensor.git src/ros2_bno55_sensor
@@ -51,8 +51,8 @@ WORKDIR /home/jetson/lotus_ros2_ws/src/ros2_bno55_sensor/thirdparty/BNO055_drive
 RUN git apply ../../bno055.h.patch
 
 WORKDIR /home/jetson/lotus_ros2_ws/
-RUN adduser -D navigation
-USER navigation
+#RUN adduser navigation
+#USER navigation
 RUN pip install opencv-python
 
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; rosdep init"
