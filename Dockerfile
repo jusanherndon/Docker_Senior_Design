@@ -2,15 +2,10 @@ FROM balenalib/jetson-xavier-ubuntu:jammy
 
 ENV DEBIAN_FRONTEND noninteractive
 
-COPY trusted.gpg /etc/apt
-COPY trusted.gpg.d /etc/apt/
 COPY nv_boot_control.conf /etc/nv_boot_control.conf
 COPY jetson_multimedia_api /usr/src/
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-ADD --chown=root:root https://repo.download.nvidia.com/jetson/jetson-ota-public.asc /etc/apt/trusted.gpg.d/jetson-ota-public.asc
-RUN chmod 644 /etc/apt/trusted.gpg.d/jetson-ota-public.asc 
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
 RUN mkdir /home/jetson
 RUN mkdir /home/jetson/lotus_ros2_ws
@@ -27,6 +22,10 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
 RUN wget http://ports.ubuntu.com/ubuntu-ports/pool/main/libf/libffi/libffi6_3.2.1-8_arm64.deb
 RUN dpkg -i libffi6*.deb
 RUN rm libffi6*.deb
+
+ADD --chown=root:root https://repo.download.nvidia.com/jetson/jetson-ota-public.asc /etc/apt/trusted.gpg.d/jetson-ota-public.asc
+RUN chmod 644 /etc/apt/trusted.gpg.d/jetson-ota-public.asc 
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
 RUN apt update 
 RUN apt install -y lsb-release gtk3-nocsd libcanberra-gtk-module git cmake python3-dev locales apt-utils gnupg dpkg-dev wget tar libi2c-dev ros-humble-desktop python3-colcon-common-extensions ros-humble-ros2-control ros-humble-robot-localization ros-humble-nav2* ros-humble-robot-state-publisher ros-humble-image-transport-plugins python3-rosdep python3-vcstool python3-pip libopencv-dev python3-opencv
@@ -52,6 +51,8 @@ WORKDIR /home/jetson/lotus_ros2_ws/src/ros2_bno55_sensor/thirdparty/BNO055_drive
 RUN git apply ../../bno055.h.patch
 
 WORKDIR /home/jetson/lotus_ros2_ws/
+RUN adduser -D navigation
+USER navigation
 RUN pip install opencv-python
 
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; rosdep init"
