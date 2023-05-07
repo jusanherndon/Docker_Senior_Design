@@ -53,7 +53,7 @@ RUN git apply ../../bno055.h.patch
 WORKDIR /home/jetson/lotus_ros2_ws/
 #RUN adduser navigation
 #USER navigation
-RUN pip install opencv-python
+#RUN pip install opencv-python
 
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; rosdep init"
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; rosdep update"
