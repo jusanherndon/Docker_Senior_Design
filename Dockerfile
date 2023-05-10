@@ -57,3 +57,5 @@ RUN /bin/bash -c "source /opt/ros/humble/setup.bash; rosdep update"
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; rosdep install -y -r -q --from-paths src --ignore-src --rosdistro humble"
 
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; colcon build"
+
+ENTRYPOINT ros2 launch lotus_nav lotus_control_service.launch.py
