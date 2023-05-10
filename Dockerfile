@@ -58,4 +58,4 @@ RUN /bin/bash -c "source /opt/ros/humble/setup.bash; rosdep install -y -r -q --f
 
 RUN /bin/bash -c "source /opt/ros/humble/setup.bash; colcon build"
 
-ENTRYPOINT ros2 launch lotus_nav lotus_control_service.launch.py
+ENTRYPOINT /bin/bash -c "source /opt/ros/humble/setup.bash; source install/setup.bash; ros2 launch lotus_nav lotus_control_service.launch.py"
